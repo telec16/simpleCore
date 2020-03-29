@@ -12,25 +12,43 @@ public class SoundHelper {
 	}
 
 	public boolean playFromConfig(Player player, String key) {
-		return playFromConfig(player, key, 10);
+		return playFromConfig(plugin, player, key);
 	}
 
 	public boolean playFromConfig(Player player, String key, float volume) {
-		return playFromConfig(player, key, volume, 1);
+		return playFromConfig(plugin, player, key, volume);
 	}
 
 	public boolean playFromConfig(Player player, String key, float volume, float pitch) {
+		return playFromConfig(plugin, player, key, volume, pitch);
+	}
+
+	public static boolean playFromConfig(JavaPlugin plugin, Player player, String key) {
+		return playFromConfig(plugin, player, key, 10);
+	}
+
+	public static boolean playFromConfig(JavaPlugin plugin, Player player, String key, float volume) {
+		return playFromConfig(plugin, player, key, volume, 1);
+	}
+
+	public static boolean playFromConfig(JavaPlugin plugin, Player player, String key, float volume, float pitch) {
 		String soundName = plugin.getConfig().getString(key);
 
 		if (soundName != null) {
-			try {
-				Sound sound = Sound.valueOf(soundName);
-				player.playSound(player.getLocation(), sound, volume, pitch);
+			return play(player, soundName, volume, pitch);
+		}
 
-				return true;
+		return false;
+	}
 
-			} catch (IllegalArgumentException e) {
-			}
+	public static boolean play(Player player, String soundName, float volume, float pitch) {
+		try {
+			Sound sound = Sound.valueOf(soundName);
+			player.playSound(player.getLocation(), sound, volume, pitch);
+
+			return true;
+
+		} catch (IllegalArgumentException e) {
 		}
 
 		return false;
